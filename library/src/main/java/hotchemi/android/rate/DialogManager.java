@@ -36,23 +36,13 @@ final class DialogManager {
         if (view != null) builder.setView(view);
 
         final OnClickButtonListener listener = options.getListener();
+        final OnClickButtonListener overridePositiveButtonListener = options.getPositiveButtonListener();
 
         builder.setPositiveButton(options.getPositiveText(context), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                if (options.isUseInAppReview()) {
-                    ReviewManager rm = ReviewManagerFactory.create(context);
-                    Task<ReviewInfo> request = rm.requestReviewFlow();
-                    request.addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            ReviewInfo reviewInfo = task.getResult();
-                            Task<Void> flow = rm.launchReviewFlow((Activity) context, reviewInfo);
-                            flow.addOnCompleteListener(result -> {
-
-                            });
-                        }
-                    });
-
+                if (overridePositiveButtonListener != null) {
+                    overridePositiveButtonListener.onClickButton(which);
                 } else {
                     final Intent intentToAppstore = options.getStoreType() == StoreType.GOOGLEPLAY ?
                             createIntentForGooglePlay(context) : createIntentForAmazonAppstore(context);

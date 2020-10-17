@@ -16,8 +16,6 @@ final class DialogOptions {
 
     private boolean cancelable = false;
 
-    private boolean useInAppReview = false;
-
     private StoreType storeType = StoreType.GOOGLEPLAY;
 
     private int titleResId = R.string.rate_dialog_title;
@@ -43,6 +41,8 @@ final class DialogOptions {
     private View view;
 
     private Reference<OnClickButtonListener> listener;
+
+    private Reference<OnClickButtonListener> overridePositiveButtonListener;
 
     public boolean shouldShowNeutralButton() {
         return showNeutralButton;
@@ -140,6 +140,14 @@ final class DialogOptions {
         this.listener = new WeakReference<>(listener);
     }
 
+    public OnClickButtonListener getPositiveButtonListener() {
+        return overridePositiveButtonListener != null ? overridePositiveButtonListener.get() : null;
+    }
+
+    public void setPositiveButtonListener(OnClickButtonListener listener) {
+        this.overridePositiveButtonListener = new WeakReference<>(listener);
+    }
+
     public String getTitleText(Context context) {
         if (titleText == null) {
             return context.getString(titleResId);
@@ -193,13 +201,5 @@ final class DialogOptions {
 
     public void setNegativeText(String negativeText) {
         this.negativeText = negativeText;
-    }
-
-    public boolean isUseInAppReview() {
-        return useInAppReview;
-    }
-
-    public void setUseInAppReview(boolean useInAppReview) {
-        this.useInAppReview = useInAppReview;
     }
 }
