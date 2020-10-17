@@ -23,6 +23,7 @@ public class MainActivity extends Activity {
                 .setShowLaterButton(true) // default true.
                 .setDebug(true) // default false.
                 .setCancelable(false) // default false.
+                .useInAppReviewSystem(true) // default false
                 .setOnClickButtonListener(new OnClickButtonListener() { // callback listener.
                     @Override
                     public void onClickButton(int which) {
