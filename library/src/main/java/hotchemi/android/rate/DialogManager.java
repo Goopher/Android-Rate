@@ -1,5 +1,6 @@
 package hotchemi.android.rate;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -7,8 +8,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
 
+import com.google.android.play.core.review.ReviewInfo;
 import com.google.android.play.core.review.ReviewManager;
 import com.google.android.play.core.review.ReviewManagerFactory;
+import com.google.android.play.core.tasks.Task;
 
 import static hotchemi.android.rate.IntentHelper.createIntentForAmazonAppstore;
 import static hotchemi.android.rate.IntentHelper.createIntentForGooglePlay;
@@ -37,12 +40,26 @@ final class DialogManager {
         builder.setPositiveButton(options.getPositiveText(context), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-//                ReviewManager rm = ReviewManagerFactory.create(context);
-                final Intent intentToAppstore = options.getStoreType() == StoreType.GOOGLEPLAY ?
-                createIntentForGooglePlay(context) : createIntentForAmazonAppstore(context);
-                context.startActivity(intentToAppstore);
-                setAgreeShowDialog(context, false);
-                if (listener != null) listener.onClickButton(which);
+                if (options.isUseInAppReview()) {
+                    ReviewManager rm = ReviewManagerFactory.create(context);
+                    Task<ReviewInfo> request = rm.requestReviewFlow();
+                    request.addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            ReviewInfo reviewInfo = task.getResult();
+                            Task<Void> flow = rm.launchReviewFlow((Activity) context, reviewInfo);
+                            flow.addOnCompleteListener(result -> {
+
+                            });
+                        }
+                    });
+
+                } else {
+                    final Intent intentToAppstore = options.getStoreType() == StoreType.GOOGLEPLAY ?
+                            createIntentForGooglePlay(context) : createIntentForAmazonAppstore(context);
+                    context.startActivity(intentToAppstore);
+                    setAgreeShowDialog(context, false);
+                    if (listener != null) listener.onClickButton(which);
+                }
             }
         });
 

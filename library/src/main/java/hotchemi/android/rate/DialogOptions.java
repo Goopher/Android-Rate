@@ -16,6 +16,8 @@ final class DialogOptions {
 
     private boolean cancelable = false;
 
+    private boolean useInAppReview = false;
+
     private StoreType storeType = StoreType.GOOGLEPLAY;
 
     private int titleResId = R.string.rate_dialog_title;
@@ -191,5 +193,13 @@ final class DialogOptions {
 
     public void setNegativeText(String negativeText) {
         this.negativeText = negativeText;
+    }
+
+    public boolean isUseInAppReview() {
+        return useInAppReview;
+    }
+
+    public void setUseInAppReview(boolean useInAppReview) {
+        this.useInAppReview = useInAppReview;
     }
 }

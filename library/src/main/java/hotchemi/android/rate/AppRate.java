@@ -108,6 +108,11 @@ public final class AppRate {
         return this;
     }
 
+    public AppRate useInAppReviewSystem(boolean useInAppReviewSystem) {
+        options.setUseInAppReview(useInAppReviewSystem);
+        return this;
+    }
+
     public AppRate setOnClickButtonListener(OnClickButtonListener listener) {
         options.setListener(listener);
         return this;
