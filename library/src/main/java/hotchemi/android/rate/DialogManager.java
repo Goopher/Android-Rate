@@ -7,6 +7,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.view.View;
 
+import com.google.android.play.core.review.ReviewManager;
+import com.google.android.play.core.review.ReviewManagerFactory;
+
 import static hotchemi.android.rate.IntentHelper.createIntentForAmazonAppstore;
 import static hotchemi.android.rate.IntentHelper.createIntentForGooglePlay;
 import static hotchemi.android.rate.PreferenceHelper.setAgreeShowDialog;
@@ -34,6 +37,7 @@ final class DialogManager {
         builder.setPositiveButton(options.getPositiveText(context), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+//                ReviewManager rm = ReviewManagerFactory.create(context);
                 final Intent intentToAppstore = options.getStoreType() == StoreType.GOOGLEPLAY ?
                 createIntentForGooglePlay(context) : createIntentForAmazonAppstore(context);
                 context.startActivity(intentToAppstore);
